@@ -1,0 +1,80 @@
+{
+  "name": "commandOnAllFiles",
+  "displayName": "Command on All Files",
+  "description": "Apply one or more commands to all files in the Workspace",
+  "publisher": "rioj7",
+  "license": "MIT",
+  "version": "0.1.0",
+  "engines": {"vscode": "^1.47.0"},
+  "categories": ["Other"],
+  "keywords": ["command","files","all","multi-root ready"],
+  "icon": "images/icon.png",
+  "galleryBanner": {"color": "#000080", "theme": "dark"},
+  "activationEvents": [
+    "onCommand:commandOnAllFiles.applyOnWorkspace"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "commandOnAllFiles.applyOnWorkspace",
+        "title": "Apply 1 or more commands to all files in the Workspace"
+      }
+    ],
+    "configuration": {
+      "title": "Command on All Files",
+      "properties": {
+        "commandOnAllFiles.includeFileExtensions": {
+          "type": "array",
+          "scope": "resource",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "List of file extensions to include when apply the command(s)."
+        },
+        "commandOnAllFiles.excludeFolders": {
+          "type": "array",
+          "scope": "resource",
+          "items": { "type": "string" },
+          "default": ["node_modules", "out", ".vscode-test", "media", ".git"],
+          "description": "List of folders to exclude."
+        },
+        "commandOnAllFiles.commands": {
+          "type": "object",
+          "scope": "resource",
+          "description": "Commands by name",
+          "default": {},
+          "patternProperties": {
+            "^.+$": {
+              "type": "object",
+              "description": "Properties for this named command",
+              "properties": {
+                "command": {
+                  "type": "string",
+                  "description": "the id of the command"
+                },
+                "includeFileExtensions": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "List of file extensions to include when apply the command(s)."
+                },
+                "excludeFolders": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "List of folders to exclude."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "main": "./extension.js",
+  "homepage": "https://github.com/rioj7/commandOnAllFiles",
+  "bugs": {
+    "url": "https://github.com/rioj7/commandOnAllFiles/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rioj7/commandOnAllFiles.git"
+  }
+}
