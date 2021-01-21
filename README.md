@@ -7,11 +7,9 @@ This extension is based on the [Format All Files in Workspace](https://marketpla
 
 # Extension commands
 
-The extension export the following command:
+The extension exports the following command:
 
-* `commandOnAllFiles.applyOnWorkspace`: It applies a command to all files in the (Multi Root) Workspace. It needs a command to apply in an argument. The argument is an array with the first element a key in the setting `commandOnAllFiles.commands`.
-
-Currently this argument can only be supplied with a key binding. This will change it the next release.
+* `commandOnAllFiles.applyOnWorkspace`: It applies a command to all files in the (Multi Root) Workspace. It needs a command to apply in an argument. The argument is an array with the first element a key in the setting `commandOnAllFiles.commands`.<br/>When the command is called from the command palette a list of known commands is shown and the user can select one or <kbd>Escape</kbd> the selection.
 
 # applyOnWorkspace
 
@@ -27,7 +25,7 @@ This means that files that are open in a tab will be closed if they meet the cri
 
 * `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be opened and formatted.<br/>Defaults to `[]`.
 * `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to format.<br/>Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
-* `commandOnAllFiles.commands`: Here we describe the command to apply together with possible overrides of `includeFileExtensions` and `excludeFolders`. The key of a command is its description and the properties of its value are:
+* `commandOnAllFiles.commands`: Here we describe the command to apply together with possible overrides of `includeFileExtensions` and `excludeFolders`. The key of a command is its description and the properties of its value object are:
     * `command`: the command to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
@@ -75,5 +73,4 @@ In `keybindings.json`:
 
 # TODO
 
-* Allow the command (`applyOnWorkspace`) to be called from the Command Palette and pick the command to apply from a list
 * Find a way to get a list of file URI's that have a tab so only close files not currently open
