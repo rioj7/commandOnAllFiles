@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -60,6 +60,18 @@
                   "type": "array",
                   "items": { "type": "string" },
                   "description": "List of folders to exclude."
+                },
+                "label": {
+                  "type": "string",
+                  "description": "(Optional) Label to use in the QuickPick list for the command commandOnAllFiles.applyOnWorkspace"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "(Optional) Description to use in the QuickPick list on the same line for the command commandOnAllFiles.applyOnWorkspace"
+                },
+                "detail": {
+                  "type": "string",
+                  "description": "(Optional) Detail to use in the QuickPick list on a separate line for the command commandOnAllFiles.applyOnWorkspace"
                 }
               }
             }
