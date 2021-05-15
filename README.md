@@ -23,15 +23,19 @@ This means that files that are open in a tab will be closed if they meet the cri
 
 # Extension Settings
 
-* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be opened and formatted.<br/>Defaults to `[]`.
-* `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to format.<br/>Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
+* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed.<br/>Defaults to `[]`.
+* `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.<br/>Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.<br/>Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
+* `commandOnAllFiles.includeFolders`: An array of [Glob Patterns](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) describing folders that will determine which files will be processed.<br/>There is no need to use `**` at the start of the Glob Pattern.<br/>If no Glob Pattern defined all files with a matching extension are processed.
 * `commandOnAllFiles.commands`: Here we describe the command to apply together with possible overrides of `includeFileExtensions` and `excludeFolders`. The key of a command is its description and the properties of its value object are:
     * `command`: the command to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
+    * `includeFolders`: override `commandOnAllFiles.includeFolders` if defined
     * `label`, `description`, `detail`: when `applyOnWorkspace` is called from the command palette it shows a QuickPick list. These 3 properties (`strings`) are used in the construction of the [QuickPickItem](https://code.visualstudio.com/api/references/vscode-api#QuickPickItem). The default value for `label` is the key name of the command. In the 3 properties you can [use icons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) with the `$(<name>)`-syntax.
 
 No matter what the value of `commandOnAllFiles.excludeFolders` is the `".git"` entry will always be added. This to prevent that if you make a mistake in the configuration you could corrupt your Source Control Repository.
+
+To prevent an incorrect directory match in the `includeFolders` glob patterns always include the separator `/`. Using `["/src/"]` prevents a match on directory `src-test`.
 
 # Example
 
@@ -70,6 +74,11 @@ In `keybindings.json`:
     "args": ["Add Hello to the End"]
   }
 ```
+
+# Release Notes
+
+### v0.3.0 `includeFolders` : array with glob patterns
+### v0.2.0 QuickPick list
 
 # TODO
 

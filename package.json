@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -37,6 +37,13 @@
           "default": ["node_modules", "out", ".vscode-test", "media", ".git"],
           "description": "List of folders to exclude."
         },
+        "commandOnAllFiles.includeFolders": {
+          "type": "array",
+          "scope": "resource",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "List of glob patterns of folders to use."
+        },
         "commandOnAllFiles.commands": {
           "type": "object",
           "scope": "resource",
@@ -60,6 +67,11 @@
                   "type": "array",
                   "items": { "type": "string" },
                   "description": "List of folders to exclude."
+                },
+                "includeFolders": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "List of glob patterns of folders to use."
                 },
                 "label": {
                   "type": "string",

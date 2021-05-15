@@ -11,12 +11,14 @@ function activate(context) {
 
   let includeExtensions;
   let excludeFolders;
+  let includeFolders;
   let unableToApply;
   var recentlyUsedCommandOnAllFiles = [];
 
   async function applyOnWorkspace(uri, command) {
     const stat = await vscode.workspace.fs.stat(uri);
-    if ( isStatType(stat, vscode.FileType.Directory) && !excludeFolders.includes(path.basename(uri.fsPath))) {
+    if (isStatType(stat, vscode.FileType.Directory)) {
+      if (excludeFolders.includes(path.basename(uri.fsPath))) { return; }
       const files = await vscode.workspace.fs.readDirectory(uri);
       for (const file of files) {
         await applyOnWorkspace(vscode.Uri.joinPath(uri, file[0]), command);
@@ -24,6 +26,18 @@ function activate(context) {
       return;
     }
     if ( isStatType(stat, vscode.FileType.File) && includeExtensions.includes(path.extname(uri.fsPath))) {
+      if (includeFolders && includeFolders.length > 0) {
+        let found = false;
+        let path = uri.path;
+        for (const incFolderRE of includeFolders) {
+          incFolderRE.lastIndex = 0;
+          if (incFolderRE.test(path)) {
+            found = true;
+            break;
+          }
+        }
+        if (!found) { return; }
+      }
       try {
         await vscode.window.showTextDocument(uri);
         await vscode.commands.executeCommand(command);
@@ -90,8 +104,20 @@ function activate(context) {
         return val;
       };
       includeExtensions = getConfigProperty('includeFileExtensions', []);
-      excludeFolders = getConfigProperty('excludeFolders', []);
+      excludeFolders = getConfigProperty('excludeFolders', []).concat(); // make shallow copy of configuration array
       excludeFolders.push('.git'); // Never traverse this
+      let globRE = /\.|\*\*|\*|\?|\{([^}]+)\}|\[!/g;
+      includeFolders = getConfigProperty('includeFolders', []).map( glob => {
+        globRE.lastIndex = 0;
+        return new RegExp(glob.replace(globRE, (m, p1) => {
+          if (m === '.') return '\\.';
+          if (m === '*') return '[^/]+';
+          if (m === '?') return '[^/]';
+          if (m === '**') return '.*';
+          if (m.startsWith('{')) return `(${p1.replaceAll(',','|')})`;
+          if (m === '[!') return '[^';
+        }));
+      });
       unableToApply = [];
       let command = getProperty(argsCommand, 'command');
       for (const folder of folders) {
