@@ -39,6 +39,16 @@ To prevent an incorrect directory match in the `includeFolders` glob patterns al
 
 # Example
 
+If you know the command description from the **View** > **Command Palette** (`Ctrl+Shift+P`), what do you need to set the `"command"` property.
+
+For example you want to apply the command `Inline CSS`, you have to find the command ID for this command with the **Keyboard Shortcuts** editor.
+
+1. Use menu: **File** > **Preferences** > **Keyboard Shortcuts**
+1. Search for `Inline`
+1. Locate the `Inline CSS` command
+1. From context menu (right click): **Copy Command ID**
+1. Use this as the value of the `"command"` property
+
 An example of how to configure the extension to add `Hello` to the end of all `.txt` files in the Workspace. We need the extension [multi-command](https://marketplace.visualstudio.com/items?itemName=ryuta46.multi-command) because the have to perform a sequence of commands.
 
 The default value for `commandOnAllFiles.excludeFolders` is enough for this example.
