@@ -23,7 +23,7 @@ This means that files that are open in a tab will be closed if they meet the cri
 
 # Extension Settings
 
-* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed.<br/>Defaults to `[]`.
+* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed. A file extension contains the `.` (period). Example `[".html", ".css", ".js"]`<br/>Defaults to `[]`.
 * `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.<br/>Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.<br/>Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
 * `commandOnAllFiles.includeFolders`: An array of [Glob Patterns](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) describing folders that will determine which files will be processed.<br/>There is no need to use `**` at the start of the Glob Pattern.<br/>If no Glob Pattern defined all files with a matching extension are processed.
 * `commandOnAllFiles.commands`: Here we describe the command to apply together with possible overrides of `includeFileExtensions` and `excludeFolders`. The key of a command is its description and the properties of its value object are:
