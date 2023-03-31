@@ -94,11 +94,6 @@ In `keybindings.json`:
   }
 ```
 
-# Release Notes
-
-### v0.3.0 `includeFolders` : array with glob patterns
-### v0.2.0 QuickPick list
-
 # TODO
 
 * Find a way to get a list of file URI's that have a tab so only close files not currently open
