@@ -17,6 +17,7 @@
     "commands": [
       {
         "command": "commandOnAllFiles.applyOnWorkspace",
+        "category": "Command On All Files",
         "title": "Apply 1 or more commands to all files in the Workspace"
       }
     ],

@@ -9,7 +9,9 @@ This extension is based on the [Format All Files in Workspace](https://marketpla
 
 The extension exports the following command:
 
-* `commandOnAllFiles.applyOnWorkspace`: It applies a command to all files in the (Multi Root) Workspace. It needs a command to apply in an argument. The argument is an array with the first element a key in the setting `commandOnAllFiles.commands`.<br/>When the command is called from the command palette a list of known commands is shown and the user can select one or <kbd>Escape</kbd> the selection.
+* **CommandOnAllFiles: Apply 1 or more commands to all files in the Workspace** : `commandOnAllFiles.applyOnWorkspace`  
+  It applies a command to all files in the (Multi Root) Workspace. It needs a command to apply in an argument. The argument is an array with the first element a key in the setting `commandOnAllFiles.commands`.  
+  When the command is called from the command palette a list of known commands is shown and the user can select one or <kbd>Escape</kbd> the selection.
 
 # applyOnWorkspace
 
@@ -23,11 +25,18 @@ This means that files that are open in a tab will be closed if they meet the cri
 
 # Extension Settings
 
-* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed. A file extension contains the `.` (period). Example `[".html", ".css", ".js"]`<br/>Defaults to `[]`.
-* `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.<br/>Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.<br/>Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
-* `commandOnAllFiles.includeFolders`: An array of [Glob Patterns](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) describing folders that will determine which files will be processed.<br/>There is no need to use `**` at the start of the Glob Pattern.<br/>If no Glob Pattern defined all files with a matching extension are processed.
-* `commandOnAllFiles.commands`: Here we describe the command to apply together with possible overrides of `includeFileExtensions` and `excludeFolders`. The key of a command is its description and the properties of its value object are:
-    * `command`: the command to apply
+* `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed.  
+  A file extension contains the **`.`** (period). Example `[".html", ".css", ".js"]`  
+  Defaults to `[]`.
+* `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.  
+  Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.  
+  Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
+* `commandOnAllFiles.includeFolders`: An array of [Glob Patterns](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) describing folders that will determine which files will be processed.  
+  There is no need to use `**` at the start of the Glob Pattern.  
+  If no Glob Pattern defined all files with a matching extension are processed.
+* `commandOnAllFiles.commands`: An object with key/value items describing the commands to use.  
+  The key is the description of a command. The value is an object with properties for the commandID to apply together with possible overrides of `includeFileExtensions`, `excludeFolders` and `includeFolders`. The properties of the value object are:
+    * `command`: the commandID to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
     * `includeFolders`: override `commandOnAllFiles.includeFolders` if defined
