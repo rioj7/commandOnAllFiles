@@ -34,12 +34,14 @@ This means that files that are open in a tab will be closed if they meet the cri
 * `commandOnAllFiles.includeFolders`: An array of [Glob Patterns](https://code.visualstudio.com/api/references/vscode-api#GlobPattern) describing folders that will determine which files will be processed.  
   There is no need to use `**` at the start of the Glob Pattern.  
   If no Glob Pattern defined all files with a matching extension are processed.
+* `commandOnAllFiles.saveFiles`: If `true` save and close a modified file. If `false` keep a modified file open in the editor. (default: `true`)
 * `commandOnAllFiles.commands`: An object with key/value items describing the commands to use.  
   The key is the description of a command. The value is an object with properties for the commandID to apply together with possible overrides of `includeFileExtensions`, `excludeFolders` and `includeFolders`. The properties of the value object are:
     * `command`: the commandID to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
     * `includeFolders`: override `commandOnAllFiles.includeFolders` if defined
+    * `saveFiles`: override `commandOnAllFiles.saveFiles` if defined
     * `label`, `description`, `detail`: when `applyOnWorkspace` is called from the command palette it shows a QuickPick list. These 3 properties (`strings`) are used in the construction of the [QuickPickItem](https://code.visualstudio.com/api/references/vscode-api#QuickPickItem). The default value for `label` is the key name of the command. In the 3 properties you can [use icons](https://microsoft.github.io/vscode-codicons/dist/codicon.html) with the `$(<name>)`-syntax.
 
 No matter what the value of `commandOnAllFiles.excludeFolders` is the `".git"` entry will always be added. This to prevent that if you make a mistake in the configuration you could corrupt your Source Control Repository.

@@ -13,6 +13,7 @@ function activate(context) {
   let excludeFolders;
   let includeFolders;
   let unableToApply;
+  let saveFiles;
   var recentlyUsedCommandOnAllFiles = [];
 
   async function applyOnWorkspace(uri, command) {
@@ -39,10 +40,14 @@ function activate(context) {
         if (!found) { return; }
       }
       try {
-        await vscode.window.showTextDocument(uri);
+        let editor = await vscode.window.showTextDocument(uri);
         await vscode.commands.executeCommand(command);
-        await vscode.commands.executeCommand('workbench.action.files.save');
-        await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+        if (saveFiles) {
+          await vscode.commands.executeCommand('workbench.action.files.save');
+        }
+        if (!editor.document.isDirty) {
+          await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+        }
       } catch (e) {
         unableToApply.push(uri.fsPath);
       }
@@ -98,11 +103,12 @@ function activate(context) {
       if (!argsCommand) { return; }
       const getConfigProperty = (property, deflt) => {
         let val = getProperty(argsCommand, property);
-        if (!val) {
+        if (val === undefined) {
           val = config.get(property, deflt);
         }
         return val;
       };
+      saveFiles = getConfigProperty('saveFiles', true);
       includeExtensions = getConfigProperty('includeFileExtensions', []);
       excludeFolders = getConfigProperty('excludeFolders', []).concat(); // make shallow copy of configuration array
       excludeFolders.push('.git'); // Never traverse this

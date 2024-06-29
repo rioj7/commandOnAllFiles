@@ -1,5 +1,9 @@
 # Change Log
 
+## [v0.4.0] 2024-06-29
+### Added
+- `saveFiles` : should a modified file be saved (default: `true`)
+
 ## [v0.3.0] 2021-05-15
 ### Added
 - `includeFolders` : array with glob patterns

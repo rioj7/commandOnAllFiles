@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -45,6 +45,12 @@
           "default": [],
           "description": "List of glob patterns of folders to use."
         },
+        "commandOnAllFiles.saveFiles": {
+          "type": "boolean",
+          "scope": "resource",
+          "default": true,
+          "description": "save a modified file."
+        },
         "commandOnAllFiles.commands": {
           "type": "object",
           "scope": "resource",
@@ -73,6 +79,12 @@
                   "type": "array",
                   "items": { "type": "string" },
                   "description": "List of glob patterns of folders to use."
+                },
+                "saveFiles": {
+                  "type": "boolean",
+                  "scope": "resource",
+                  "default": true,
+                  "description": "save a modified file."
                 },
                 "label": {
                   "type": "string",
