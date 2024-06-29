@@ -9,38 +9,43 @@ function activate(context) {
   const getProperty = (obj, prop, deflt) => { return obj.hasOwnProperty(prop) ? obj[prop] : deflt; };
   const isString = obj => typeof obj === 'string';
 
-  let includeExtensions;
+  let includeFileExtensions;
+  let includeFiles;
   let excludeFolders;
   let includeFolders;
   let unableToApply;
   let saveFiles;
   var recentlyUsedCommandOnAllFiles = [];
 
-  async function applyOnWorkspace(uri, command) {
-    const stat = await vscode.workspace.fs.stat(uri);
+  function testREList(reList, txt) {
+    if (!(reList && reList.length > 0)) { return true; }
+    for (const itemRE of reList) {
+      itemRE.lastIndex = 0;
+      if (itemRE.test(txt)) { return true; }
+    }
+    return false;
+  }
+
+  async function applyOnWorkspace(workspaceDirname, uriFile, command) {
+    const stat = await vscode.workspace.fs.stat(uriFile);
     if (isStatType(stat, vscode.FileType.Directory)) {
-      if (excludeFolders.includes(path.basename(uri.fsPath))) { return; }
-      const files = await vscode.workspace.fs.readDirectory(uri);
+      if (excludeFolders.includes(path.basename(uriFile.fsPath))) { return; }
+      const files = await vscode.workspace.fs.readDirectory(uriFile);
       for (const file of files) {
-        await applyOnWorkspace(vscode.Uri.joinPath(uri, file[0]), command);
+        await applyOnWorkspace(workspaceDirname, vscode.Uri.joinPath(uriFile, file[0]), command);
       }
       return;
     }
-    if ( isStatType(stat, vscode.FileType.File) && includeExtensions.includes(path.extname(uri.fsPath))) {
-      if (includeFolders && includeFolders.length > 0) {
-        let found = false;
-        let path = uri.path;
-        for (const incFolderRE of includeFolders) {
-          incFolderRE.lastIndex = 0;
-          if (incFolderRE.test(path)) {
-            found = true;
-            break;
-          }
-        }
-        if (!found) { return; }
+    if (isStatType(stat, vscode.FileType.File)) {
+      let relativePath = uriFile.path.replace(workspaceDirname, '');
+      if (!testREList(includeFolders, relativePath)) { return; }
+      if (includeFiles !== undefined) {
+        if (!testREList(includeFiles, relativePath)) { return; }
+      } else {
+        if (!includeFileExtensions.includes(path.extname(uriFile.fsPath))) { return; }
       }
       try {
-        let editor = await vscode.window.showTextDocument(uri);
+        let editor = await vscode.window.showTextDocument(uriFile);
         await vscode.commands.executeCommand(command);
         if (saveFiles) {
           await vscode.commands.executeCommand('workbench.action.files.save');
@@ -49,7 +54,7 @@ function activate(context) {
           await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
         }
       } catch (e) {
-        unableToApply.push(uri.fsPath);
+        unableToApply.push(uriFile.fsPath);
       }
     }
   }
@@ -109,7 +114,9 @@ function activate(context) {
         return val;
       };
       saveFiles = getConfigProperty('saveFiles', true);
-      includeExtensions = getConfigProperty('includeFileExtensions', []);
+      includeFileExtensions = getConfigProperty('includeFileExtensions', []);
+      includeFiles = getConfigProperty('includeFiles', []).map( incFileObj => new RegExp(getProperty(incFileObj, 'regex', ''), getProperty(incFileObj, 'flags')) );
+      if (includeFiles.length === 0) { includeFiles = undefined; }
       excludeFolders = getConfigProperty('excludeFolders', []).concat(); // make shallow copy of configuration array
       excludeFolders.push('.git'); // Never traverse this
       let globRE = /\.|\*\*|\*|\?|\{([^}]+)\}|\[!/g;
@@ -127,7 +134,8 @@ function activate(context) {
       unableToApply = [];
       let command = getProperty(argsCommand, 'command');
       for (const folder of folders) {
-        await applyOnWorkspace(folder.uri, command);
+        let workspaceDirname = vscode.Uri.file(path.dirname(folder.uri.fsPath)).path;
+        await applyOnWorkspace(workspaceDirname, folder.uri, command);
       }
       vscode.window.showInformationMessage('Finished CommandOnAllFiles.');
     })

@@ -28,6 +28,11 @@ This means that files that are open in a tab will be closed if they meet the cri
 * `commandOnAllFiles.includeFileExtensions`: Only files with file extensions in this list will be processed.  
   A file extension contains the **`.`** (period). Example `[".html", ".css", ".js"]`  
   Defaults to `[]`.
+* `commandOnAllFiles.includeFiles`: List of regular expressions of file paths to include. Overrides includeFileExtensions. (default: `undefined`)  
+  Each list element is an object with the following properties:
+    * `regex`: string with a regular expression that is searched in the file path (separator `/`)  
+      The file path searched is: <code>/<em>workspace_name</em>/<em>relative_file_path</em></code>
+    * `flags`: flags to use with the property `regex` (only `i` makes sence) (default `""`)
 * `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.  
   Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.  
   Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
@@ -39,6 +44,7 @@ This means that files that are open in a tab will be closed if they meet the cri
   The key is the description of a command. The value is an object with properties for the commandID to apply together with possible overrides of `includeFileExtensions`, `excludeFolders` and `includeFolders`. The properties of the value object are:
     * `command`: the commandID to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
+    * `includeFiles`: override `commandOnAllFiles.includeFiles` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
     * `includeFolders`: override `commandOnAllFiles.includeFolders` if defined
     * `saveFiles`: override `commandOnAllFiles.saveFiles` if defined
@@ -93,6 +99,22 @@ In `keybindings.json`:
     "key": "ctrl+i a", // or any other key combo
     "command": "commandOnAllFiles.applyOnWorkspace",
     "args": ["Add Hello to the End"]
+  }
+```
+
+If you want to limit the files included with a regular expression you need to use the `includeFiles` property:
+
+In `settings.json`:
+
+``` json
+  "commandOnAllFiles.commands": {
+    "Add Hello to the End": {
+      "command": "multiCommand.addHelloAtEnd",
+      "includeFiles": [
+        { "regex": "/test/test-server.*\\.py" },
+        { "regex": "/test/test-game.*\\.py" }
+      ]
+    }
   }
 ```
 

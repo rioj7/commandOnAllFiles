@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -29,7 +29,26 @@
           "scope": "resource",
           "items": { "type": "string" },
           "default": [],
-          "description": "List of file extensions to include when apply the command(s)."
+          "description": "List of file extensions to include to apply the command(s)."
+        },
+        "commandOnAllFiles.includeFiles": {
+          "type": "array",
+          "scope": "resource",
+          "items": {
+            "type": "object",
+            "properties": {
+              "regex": {
+                "type": "string",
+                "description": "regular expression for file path to include"
+              },
+              "flags": {
+                "type": "string",
+                "description": "flags for the regex property",
+                "default": ""
+              }
+            }
+          },
+          "description": "List of file path objects (regexp) to include to apply the command(s). Overrides includeFileExtensions."
         },
         "commandOnAllFiles.excludeFolders": {
           "type": "array",
@@ -68,7 +87,26 @@
                 "includeFileExtensions": {
                   "type": "array",
                   "items": { "type": "string" },
-                  "description": "List of file extensions to include when apply the command(s)."
+                  "description": "List of file extensions to include to apply the command(s)."
+                },
+                "includeFiles": {
+                  "type": "array",
+                  "scope": "resource",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "regex": {
+                        "type": "string",
+                        "description": "regular expression for file path to include"
+                      },
+                      "flags": {
+                        "type": "string",
+                        "description": "flags for the regex property",
+                        "default": ""
+                      }
+                    }
+                  },
+                  "description": "List of file path objects (regexp) to include to apply the command(s). Overrides includeFileExtensions."
                 },
                 "excludeFolders": {
                   "type": "array",
