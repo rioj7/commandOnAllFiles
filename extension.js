@@ -26,6 +26,10 @@ function activate(context) {
     return false;
   }
 
+  function delay(time_ms) {
+    return new Promise(resolve => setTimeout(resolve, time_ms));
+  }
+
   async function applyOnWorkspace(workspaceDirname, uriFile, command) {
     const stat = await vscode.workspace.fs.stat(uriFile);
     if (isStatType(stat, vscode.FileType.Directory)) {
@@ -102,7 +106,7 @@ function activate(context) {
         if (isString(item)) return item;
         return item ? item.commandKey : undefined;
       });
-  
+
       if (commandKey === undefined) { return; }
       let argsCommand = getProperty(config.get('commands'), commandKey);
       if (!argsCommand) { return; }

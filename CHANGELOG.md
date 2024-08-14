@@ -1,5 +1,9 @@
 # Change Log
 
+## [v0.5.1] 2024-08-14
+### Modified
+- flag incorrect properties
+
 ## [v0.5.0] 2024-06-29
 ### Added
 - `includeFiles` : list of regular expressions of file paths to include

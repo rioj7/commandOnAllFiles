@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -104,7 +104,8 @@
                         "description": "flags for the regex property",
                         "default": ""
                       }
-                    }
+                    },
+                    "additionalProperties": false
                   },
                   "description": "List of file path objects (regexp) to include to apply the command(s). Overrides includeFileExtensions."
                 },
@@ -121,7 +122,6 @@
                 "saveFiles": {
                   "type": "boolean",
                   "scope": "resource",
-                  "default": true,
                   "description": "save a modified file."
                 },
                 "label": {
@@ -136,7 +136,8 @@
                   "type": "string",
                   "description": "(Optional) Detail to use in the QuickPick list on a separate line for the command commandOnAllFiles.applyOnWorkspace"
                 }
-              }
+              },
+              "additionalProperties": false
             }
           }
         }
