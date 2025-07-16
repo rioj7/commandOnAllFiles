@@ -1,5 +1,9 @@
 # Change Log
 
+## [v0.6.0] 2025-07-16
+### Added
+- `excludeFiles` : list of regular expressions of file paths to exclude
+
 ## [v0.5.1] 2024-08-14
 ### Modified
 - flag incorrect properties

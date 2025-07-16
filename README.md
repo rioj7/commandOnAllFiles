@@ -33,6 +33,11 @@ This means that files that are open in a tab will be closed if they meet the cri
     * `regex`: string with a regular expression that is searched in the file path (separator `/`)  
       The file path searched is: <code>/<em>workspace_name</em>/<em>relative_file_path</em></code>
     * `flags`: flags to use with the property `regex` (only `i` makes sence) (default `""`)
+* `commandOnAllFiles.excludeFiles`: List of regular expressions of file paths to exclude. (default: `undefined`)  
+  Each list element is an object with the following properties:
+    * `regex`: string with a regular expression that is searched in the file path (separator `/`)  
+      The file path searched is: <code>/<em>workspace_name</em>/<em>relative_file_path</em></code>
+    * `flags`: flags to use with the property `regex` (only `i` makes sence) (default `""`)
 * `commandOnAllFiles.excludeFolders`: These folders will be skipped when looking for files to process.  
   Can contain workspacefolder (base)names to exclude certain Multi Root Workspaces.  
   Defaults to `["node_modules", "out", ".vscode-test", "media", ".git"]`
@@ -41,10 +46,12 @@ This means that files that are open in a tab will be closed if they meet the cri
   If no Glob Pattern defined all files with a matching extension are processed.
 * `commandOnAllFiles.saveFiles`: If `true` save and close a modified file. If `false` keep a modified file open in the editor. (default: `true`)
 * `commandOnAllFiles.commands`: An object with key/value items describing the commands to use.  
-  The key is the description of a command. The value is an object with properties for the commandID to apply together with possible overrides of `includeFileExtensions`, `excludeFolders` and `includeFolders`. The properties of the value object are:
+  The key is the description of a command. The value is an object with properties for the commandID to apply together with possible overrides of `includeFileExtensions`, `includeFiles`, `excludeFiles`, `excludeFolders`, `includeFolders` and `saveFiles`.  
+  The properties of the value object are:
     * `command`: the commandID to apply
     * `includeFileExtensions`: override `commandOnAllFiles.includeFileExtensions` if defined
     * `includeFiles`: override `commandOnAllFiles.includeFiles` if defined
+    * `excludeFiles`: override `commandOnAllFiles.excludeFiles` if defined
     * `excludeFolders`: override `commandOnAllFiles.excludeFolders` if defined
     * `includeFolders`: override `commandOnAllFiles.includeFolders` if defined
     * `saveFiles`: override `commandOnAllFiles.saveFiles` if defined
@@ -94,7 +101,7 @@ In `settings.json`:
 
 In `keybindings.json`:
 
-``` json
+``` jsonc
   {
     "key": "ctrl+i a", // or any other key combo
     "command": "commandOnAllFiles.applyOnWorkspace",

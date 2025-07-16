@@ -4,7 +4,7 @@
   "description": "Apply one or more commands to all files in the Workspace",
   "publisher": "rioj7",
   "license": "MIT",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "engines": {"vscode": "^1.47.0"},
   "categories": ["Other"],
   "keywords": ["command","files","all","multi-root ready"],
@@ -49,6 +49,26 @@
             }
           },
           "description": "List of file path objects (regexp) to include to apply the command(s). Overrides includeFileExtensions."
+        },
+        "commandOnAllFiles.excludeFiles": {
+          "type": "array",
+          "scope": "resource",
+          "items": {
+            "type": "object",
+            "properties": {
+              "regex": {
+                "type": "string",
+                "description": "regular expression for file path to exclude"
+              },
+              "flags": {
+                "type": "string",
+                "description": "flags for the regex property",
+                "default": ""
+              }
+            },
+            "additionalProperties": false
+          },
+          "description": "List of file path objects (regexp) to exclude to apply the command(s)."
         },
         "commandOnAllFiles.excludeFolders": {
           "type": "array",
@@ -108,6 +128,26 @@
                     "additionalProperties": false
                   },
                   "description": "List of file path objects (regexp) to include to apply the command(s). Overrides includeFileExtensions."
+                },
+                "excludeFiles": {
+                  "type": "array",
+                  "scope": "resource",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "regex": {
+                        "type": "string",
+                        "description": "regular expression for file path to exclude"
+                      },
+                      "flags": {
+                        "type": "string",
+                        "description": "flags for the regex property",
+                        "default": ""
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "description": "List of file path objects (regexp) to exclude to apply the command(s)."
                 },
                 "excludeFolders": {
                   "type": "array",

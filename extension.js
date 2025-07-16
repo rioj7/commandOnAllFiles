@@ -11,14 +11,15 @@ function activate(context) {
 
   let includeFileExtensions;
   let includeFiles;
+  let excludeFiles;
   let excludeFolders;
   let includeFolders;
   let unableToApply;
   let saveFiles;
   var recentlyUsedCommandOnAllFiles = [];
 
-  function testREList(reList, txt) {
-    if (!(reList && reList.length > 0)) { return true; }
+  function testREList(reList, txt, onEmptyList=false) {
+    if (!(reList && reList.length > 0)) { return onEmptyList; }
     for (const itemRE of reList) {
       itemRE.lastIndex = 0;
       if (itemRE.test(txt)) { return true; }
@@ -42,7 +43,8 @@ function activate(context) {
     }
     if (isStatType(stat, vscode.FileType.File)) {
       let relativePath = uriFile.path.replace(workspaceDirname, '');
-      if (!testREList(includeFolders, relativePath)) { return; }
+      if (!testREList(includeFolders, relativePath, true)) { return; }
+      if (testREList(excludeFiles, relativePath)) { return; }
       if (includeFiles !== undefined) {
         if (!testREList(includeFiles, relativePath)) { return; }
       } else {
@@ -117,10 +119,15 @@ function activate(context) {
         }
         return val;
       };
+      const getFilePathsRegex = property => {
+        let filePathsRegex = getConfigProperty(property, []).map( incFileObj => new RegExp(getProperty(incFileObj, 'regex', ''), getProperty(incFileObj, 'flags')) );
+        if (filePathsRegex.length === 0) { filePathsRegex = undefined; }
+        return filePathsRegex;
+      };
       saveFiles = getConfigProperty('saveFiles', true);
       includeFileExtensions = getConfigProperty('includeFileExtensions', []);
-      includeFiles = getConfigProperty('includeFiles', []).map( incFileObj => new RegExp(getProperty(incFileObj, 'regex', ''), getProperty(incFileObj, 'flags')) );
-      if (includeFiles.length === 0) { includeFiles = undefined; }
+      includeFiles = getFilePathsRegex('includeFiles');
+      excludeFiles = getFilePathsRegex('excludeFiles');
       excludeFolders = getConfigProperty('excludeFolders', []).concat(); // make shallow copy of configuration array
       excludeFolders.push('.git'); // Never traverse this
       let globRE = /\.|\*\*|\*|\?|\{([^}]+)\}|\[!/g;
